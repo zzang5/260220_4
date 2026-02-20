@@ -20,6 +20,7 @@ def generate_mock_pokemon_data():
         'HP': [45, 39, 44, 35, 106, 91, 106, 106],
         'Attack': [49, 52, 48, 55, 110, 134, 90, 130],
         'Defense': [49, 43, 65, 40, 90, 95, 130, 90],
+        'Speed': [45, 65, 43, 90, 130, 80, 110, 90], # 오류 해결: Speed 컬럼 추가
         'Generation': [1, 1, 1, 1, 1, 1, 2, 2],
         'Legendary': [False, False, False, False, True, False, True, True]
     }
@@ -93,6 +94,11 @@ else:
     
     with row1_col1:
         st.subheader("⚔️ 공격력(Attack) vs 방어력(Defense)")
+        
+        # hover_data에 사용할 컬럼이 실제 데이터프레임에 존재하는지 확인
+        hover_columns = ["Generation", "HP", "Speed"]
+        valid_hover_cols = [col for col in hover_columns if col in df_filtered.columns]
+
         fig_scatter = px.scatter(
             df_filtered, 
             x="Attack", 
@@ -101,7 +107,7 @@ else:
             color_discrete_map=type_colors,
             size="Total",
             hover_name="Name",
-            hover_data=["Generation", "HP", "Speed"],
+            hover_data=valid_hover_cols,
             opacity=0.8
         )
         fig_scatter.update_layout(margin=dict(l=0, r=0, t=30, b=0))
